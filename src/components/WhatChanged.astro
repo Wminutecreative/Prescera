@@ -1,0 +1,21 @@
+---
+/* 3 · WHAT CHANGED · attacks are getting sophisticated: fast, cheap, persistent, backed by dated public sources */
+import StatTile from "./StatTile.astro";
+import { TILES, TRAITS } from "../data/site";
+---
+<section class="sec" id="changed" aria-labelledby="h-changed">
+  <div class="shell">
+    <!-- the three traits sit beside the heading, in place of a lead paragraph that said the same thing -->
+    <header class="sec__head sec__head--split changed__head">
+      <div>
+        <h2 id="h-changed">Attacks no longer need an expert team behind them.</h2>
+      </div>
+      <ol class="points" aria-label="How AI changes attacks">
+        {TRAITS.map((t) => <li class="rv"><b>{t.word}</b><span>{t.line}</span></li>)}
+      </ol>
+    </header>
+    <ol class="tiles">
+      {TILES.map((tile) => <StatTile tile={tile} />)}
+    </ol>
+  </div>
+</section>

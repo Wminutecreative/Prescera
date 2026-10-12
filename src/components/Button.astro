@@ -1,0 +1,17 @@
+---
+/* Primary button. Renders a link when `href` is given, otherwise a <button>. */
+interface Props {
+  href?: string;
+  type?: "button" | "submit";
+  size?: "md" | "sm";
+  arrow?: boolean;
+  class?: string;
+}
+const { href, type = "button", size = "md", arrow = true, class: extra = "" } = Astro.props;
+const cls = ["btn", size === "sm" && "btn--sm", extra].filter(Boolean).join(" ");
+---
+{href ? (
+  <a class={cls} href={href}><slot />{arrow && <> <i class="btn__arr" aria-hidden="true">→</i></>}</a>
+) : (
+  <button class={cls} type={type}><slot />{arrow && <> <i class="btn__arr" aria-hidden="true">→</i></>}</button>
+)}

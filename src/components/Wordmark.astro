@@ -1,0 +1,8 @@
+---
+interface Props {
+  href?: string;
+  label?: string;
+}
+const { href = "#top", label } = Astro.props;
+---
+<a class="wordmark" href={href} aria-label={label}>Prescera <span class="wordmark__labs">Labs</span></a>

@@ -1,0 +1,21 @@
+---
+/* NAV · job: orient and keep the briefing one click away · all audiences.
+   Links marked data-soon are listed but not built yet; src/scripts/page.js shows "Coming soon" on click. */
+import Wordmark from "./Wordmark.astro";
+import { NAV_LINKS } from "../data/site";
+---
+<header class="nav" data-nav>
+  <div class="shell nav__in">
+    <Wordmark label="Prescera Labs, back to top" />
+    <nav class="nav__links" aria-label="Main">
+      {NAV_LINKS.map((l) => <a href={l.href} data-soon={l.soon ? "" : undefined}>{l.label}</a>)}
+    </nav>
+    <div class="nav__end">
+      <a class="btn btn--sm nav__cta nav__cta--g" href="#briefing"><span class="lg-only">Request access</span><span class="sm-only">Request access</span></a>
+      <button class="nav__menu" type="button" aria-expanded="false" aria-controls="m-menu" aria-label="Open menu" data-menu><i></i><i></i></button>
+    </div>
+  </div>
+  <div class="mmenu" id="m-menu" hidden data-mmenu>
+    {NAV_LINKS.map((l) => <a href={l.href} data-soon={l.soon ? "" : undefined}>{l.label}</a>)}
+  </div>
+</header>

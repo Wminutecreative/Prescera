@@ -1,0 +1,27 @@
+---
+/* 1 · HERO · attackers have frontier AI, defenders need their own.
+   An illustrated attack moves through a network; a dome protects the core.
+   The 2D twin (SVG) is drawn by src/scripts/pl-data.js + page.js on first paint; the 3D scene
+   (src/scripts/hero3d.js, three.js) fades in over it when WebGL and motion are available. */
+import Button from "./Button.astro";
+import HeroHud from "./HeroHud.astro";
+---
+<section class="hero" id="top" aria-labelledby="h-hero">
+  <div class="hero__stage" data-scene="hero" aria-label="Illustration: an AI attack moving through a company network, stage by stage, until a protective dome closes over its core." role="img">
+    <svg class="twin hero__twin" data-twin="hero" aria-hidden="true"></svg>
+    <div class="hero__veil" aria-hidden="true"></div>
+  </div>
+  <div class="shell hero__in">
+    <div class="hero__copy">
+      <h1 id="h-hero"><span class="h1l l1">Attackers have frontier AI.</span> <span class="h1l l2"><span class="hl">Defenders</span> need their own.</span></h1>
+      <p class="hero__sub">AI is putting sophisticated cyberattacks within reach of anyone. Prescera Labs is building foundation models for cyber defence, so defenders can act at machine speed.</p>
+      <div class="hero__ctas">
+        <Button href="#briefing">Request access</Button>
+      </div>
+    </div>
+  </div>
+  <div class="hero__hud-wrap shell">
+    <HeroHud />
+  </div>
+  <ol class="sr" data-hero-sr></ol>
+</section>

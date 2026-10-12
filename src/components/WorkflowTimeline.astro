@@ -1,0 +1,33 @@
+<!-- The four parts of the job as one timeline. The attack splits it: discovery happens before, the other three during and after.
+     Each step has a small scene that plays when the light on the rail reaches it (src/scripts/workflow.js). -->
+<div class="wf" data-wf aria-label="The four parts of a defender's work, on one timeline: discovery before an attack; triage, containment and remediation during and after it.">
+  <div class="wf__zones" aria-hidden="true"><span class="wf__zone z1"><b>Proactive</b> before an attack</span><span class="wf__zone z2"><b>Reactive</b> during and after</span></div>
+  <div class="wf__rail" aria-hidden="true"><i class="wf__line"></i><i class="wf__lit" data-wf-lit></i><span class="wf__atk" data-wf-atk><b></b>Attack starts</span><span class="wf__pulse" data-wf-pulse></span>
+    <i class="wf__node" data-wf-n>1</i><i class="wf__node" data-wf-n>2</i><i class="wf__node" data-wf-n>3</i><i class="wf__node" data-wf-n>4</i></div>
+  <ol class="wf__l">
+    <li class="wf__c" data-wf-c="0"><svg class="wf__sc sc1" viewBox="0 0 220 120" aria-hidden="true">
+        <defs><radialGradient id="wfSw" cx="0" cy="0.5" r="1"><stop offset="0" stop-color="#C9CED3" stop-opacity=".45"/><stop offset="1" stop-color="#C9CED3" stop-opacity="0"/></radialGradient></defs>
+        <g class="net"><rect x="38" y="30" width="34" height="22" rx="3"/><rect x="93" y="30" width="34" height="22" rx="3"/><rect x="148" y="30" width="34" height="22" rx="3" class="weak"/><rect x="38" y="68" width="34" height="22" rx="3"/><rect x="93" y="68" width="34" height="22" rx="3"/><rect x="148" y="68" width="34" height="22" rx="3"/>
+          <path d="M72 41H93M127 41H148M72 79H93M127 79H148M110 52V68" class="ln"/></g>
+        <g class="sweep"><path d="M110 60 L210 30 A104 104 0 0 1 210 90 Z" fill="url(#wfSw)"/></g>
+        <g class="mark"><rect x="144" y="26" width="42" height="30" rx="5"/><circle cx="186" cy="26" r="7"/><text x="186" y="29.5" text-anchor="middle">!</text></g>
+      </svg><h3>Discovery</h3><p>Find vulnerabilities before an attacker does.</p><em class="mono">Before an attack</em></li>
+    <li class="wf__c" data-wf-c="1"><svg class="wf__sc sc2" viewBox="0 0 220 120" aria-hidden="true">
+        <g class="pills"><g class="p" style="--i:0"><rect x="22" y="14" width="96" height="13" rx="6.5"/><circle cx="31" cy="20.5" r="2.5"/></g><g class="p" style="--i:1"><rect x="22" y="31" width="96" height="13" rx="6.5"/><circle cx="31" cy="37.5" r="2.5"/></g><g class="p real" style="--i:2"><rect x="22" y="48" width="96" height="13" rx="6.5"/><circle cx="31" cy="54.5" r="2.5"/><text x="128" y="58" class="tag">Real</text></g><g class="p" style="--i:3"><rect x="22" y="65" width="96" height="13" rx="6.5"/><circle cx="31" cy="71.5" r="2.5"/></g><g class="p" style="--i:4"><rect x="22" y="82" width="96" height="13" rx="6.5"/><circle cx="31" cy="88.5" r="2.5"/></g><g class="p" style="--i:5"><rect x="22" y="99" width="96" height="13" rx="6.5"/><circle cx="31" cy="105.5" r="2.5"/></g></g>
+        <text x="200" y="108" text-anchor="end" class="noise">noise</text>
+      </svg><h3>Triage</h3><p>Isolate the real attacks from the noise as soon as they enter your infrastructure.</p><em class="mono">During</em></li>
+    <li class="wf__c" data-wf-c="2"><svg class="wf__sc sc3" viewBox="0 0 220 120" aria-hidden="true">
+        <g class="links"><path d="M110 60L72 38M110 60L148 38M110 60L72 82M110 60L148 82M110 60L60 60M110 60L160 60"/></g>
+        <g class="nbr"><circle cx="72" cy="38" r="6"/><circle cx="148" cy="38" r="6"/><circle cx="72" cy="82" r="6"/><circle cx="148" cy="82" r="6"/><circle cx="60" cy="60" r="6"/><circle cx="160" cy="60" r="6"/></g>
+        <circle class="rip r1" cx="110" cy="60" r="10"/><circle class="rip r2" cx="110" cy="60" r="10"/>
+        <circle class="core" cx="110" cy="60" r="7"/>
+        <circle class="wall" cx="110" cy="60" r="24" pathLength="1"/>
+      </svg><h3>Containment</h3><p>Automated playbooks that evolve until the threat is contained.</p><em class="mono">During</em></li>
+    <li class="wf__c" data-wf-c="3"><svg class="wf__sc sc4" viewBox="0 0 220 120" aria-hidden="true">
+        <g class="box"><rect x="66" y="26" width="88" height="68" rx="6"/><path d="M78 44H142M78 58H142M78 72H120" class="ln"/></g>
+        <path class="crack" d="M104 28 L114 44 L102 56 L116 70 L106 92"/>
+        <path class="patch" d="M104 28 L114 44 L102 56 L116 70 L106 92" pathLength="1"/>
+        <g class="ok"><circle cx="154" cy="26" r="11"/><path d="M148 26 L152.5 30.5 L160 22" pathLength="1"/></g>
+      </svg><h3>Remediation</h3><p>Root-cause analysis and remediation of the core issue that let attackers in.</p><em class="mono">After</em></li>
+  </ol>
+</div>

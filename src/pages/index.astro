@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Belief from "../components/Belief.astro";
+import WhatChanged from "../components/WhatChanged.astro";
+import Defenders from "../components/Defenders.astro";
+import Briefing from "../components/Briefing.astro";
+---
+<BaseLayout>
+  <Hero />
+  <Belief />
+  <WhatChanged />
+  <Defenders />
+  <Briefing />
+</BaseLayout>
+
+<script>
+  /* Order matters: shared data and the 2D twin first, then page behaviour, the stat figures,
+     the timeline, and last the 3D hero (which loads three.js lazily after first paint). */
+  import "../scripts/pl-data.js";
+  import "../scripts/page.js";
+  import "../scripts/tiles.js";
+  import "../scripts/workflow.js";
+  import "../scripts/hero3d.js";
+</script>

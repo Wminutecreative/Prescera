@@ -1,0 +1,57 @@
+---
+/* 5 · REQUEST ACCESS · the conversion.
+   The form posts JSON to PUBLIC_FORM_ENDPOINT (a Google Apps Script web app, see apps-script/README.md),
+   which adds a row to the Google Sheet and emails the team. With no endpoint set, it falls back to a
+   pre-filled email to PUBLIC_FORM_FALLBACK_EMAIL, as the HTML prototype did. Logic: src/scripts/page.js */
+import Button from "./Button.astro";
+import { ROLES } from "../data/site";
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? "";
+const fallback = import.meta.env.PUBLIC_FORM_FALLBACK_EMAIL || "vamsi@presceralabs.ai";
+---
+<section class="sec sec--brief" id="briefing" aria-labelledby="h-brief">
+  <div class="shell brief">
+    <header class="brief__copy">
+      <h2 id="h-brief">Request access.</h2>
+      <p class="lead">Tell us a little about yourself and what you would like to know. We reply by email.</p>
+    </header>
+    <form class="form" data-form novalidate data-endpoint={endpoint} data-to={fallback}>
+      <div class="form__row">
+        <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required maxlength="200"></div>
+        <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+      </div>
+      <div class="field"><label for="f-org">Organisation</label><input id="f-org" name="org" autocomplete="organization" required maxlength="200"></div>
+      <div class="field"><label for="f-role">Role</label>
+        <div class="select"><select id="f-role" name="role" required>
+          <option value="">Choose one</option>
+          {ROLES.map((r) => <option>{r}</option>)}
+        </select></div>
+      </div>
+      <div class="field"><label for="f-need">What would you need to see first? <span class="opt">(optional)</span></label><textarea id="f-need" name="need" rows="4" maxlength="3000"></textarea></div>
+      <!-- spam trap: hidden from people and screen readers; bots that fill it are dropped -->
+      <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
+      <div class="form__end">
+        <Button type="submit">Request access</Button>
+        <p class="micro">We use your details only to reply. No mailing list.</p>
+      </div>
+      <p class="form__st" id="f-status" role="status"></p>
+    </form>
+    <!-- success state: replaces the form once the request has reached the Sheet and the team's inbox -->
+    <div class="form-done" data-form-done hidden>
+      <svg class="form-done__mark" viewBox="0 0 56 56" aria-hidden="true">
+        <circle class="form-done__ring" cx="28" cy="28" r="26" pathLength="1" />
+        <path class="form-done__tick" d="M17 28.5 L24.5 36 L39 21" pathLength="1" />
+      </svg>
+      <h3 class="form-done__title" tabindex="-1" data-done-title>Request received.</h3>
+      <p class="form-done__text">Thank you, <span data-done-name></span>. We'll reply to <b data-done-email></b>.</p>
+      <dl class="form-done__list">
+        <div><dt>Organisation</dt><dd data-done-org></dd></div>
+        <div><dt>Role</dt><dd data-done-role></dd></div>
+      </dl>
+      <div class="form-done__end">
+        <button class="form-done__again" type="button" data-done-again>Send another request <i aria-hidden="true">→</i></button>
+        <p class="micro">We use your details only to reply. No mailing list.</p>
+      </div>
+    </div>
+  </div>
+</section>

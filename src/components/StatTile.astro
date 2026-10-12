@@ -1,0 +1,12 @@
+---
+/* One dated, sourced fact. The small chart in the SVG is drawn by src/scripts/tiles.js from `fig`. */
+import type { Tile } from "../data/site";
+interface Props { tile: Tile }
+const { tile } = Astro.props;
+---
+<li class="tile rv">
+  <div class="tile__top"><time class="mono" datetime={tile.datetime}>{tile.date}</time><svg class="tile__fig" data-tile={tile.fig} viewBox="0 0 72 72" aria-hidden="true"></svg></div>
+  <p class:list={["tile__num", tile.nowrap && "tile__num--nw"]}>{tile.num}</p>
+  <p class="tile__line">{tile.line}</p>
+  <a class="src" href={tile.source.href} target="_blank" rel="noopener noreferrer">{tile.source.label} <i aria-hidden="true">↗</i></a>
+</li>

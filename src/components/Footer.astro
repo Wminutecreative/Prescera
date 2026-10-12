@@ -1,0 +1,14 @@
+---
+import Wordmark from "./Wordmark.astro";
+import { FOOTER_LINKS } from "../data/site";
+const year = new Date().getFullYear();
+---
+<footer class="foot">
+  <div class="shell foot__in">
+    <div class="foot__brand"><Wordmark /><p>A cybersecurity AI lab.</p></div>
+    <nav class="foot__links" aria-label="Footer">
+      {FOOTER_LINKS.map((l) => <a href={l.href} data-soon={l.soon ? "" : undefined}>{l.label}</a>)}
+    </nav>
+  </div>
+  <div class="shell foot__base mono"><span>© {year} Prescera Labs · presceralabs.ai</span><a href="#top" class="totop">Back to top <i aria-hidden="true"></i></a></div>
+</footer>

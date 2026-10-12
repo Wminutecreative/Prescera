@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://presceralabs.ai/sitemap-index.xml
