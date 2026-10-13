@@ -2596,6 +2596,7 @@ body::after {
         width: auto;
         max-width: 100%;
         white-space: normal;
+        display: inline;
     }
 }
 
@@ -2867,7 +2868,7 @@ html.no-motion .signals {
     width: min(1240px, calc(100% - 2 * clamp(12px, 2.4vw, 32px)));
     padding-inline: 10px 8px 0 !important;
     padding-left: 22px !important;
-    padding-right: 8px !important;
+    padding-right: 22px !important;
     border-radius: 14px;
     background: linear-gradient(180deg, rgba(31, 31, 31, .62), rgba(18, 18, 18, .62));
     -webkit-backdrop-filter: blur(20px) saturate(1.25);
@@ -2956,6 +2957,7 @@ html.no-motion .signals {
 @media (max-width: 1023px) {
     .nav__in {
         padding-left: 16px !important;
+        padding-right: 16px !important;
     }
 }
 
@@ -2963,7 +2965,7 @@ html.no-motion .signals {
     .nav__in {
         width: calc(100% - 20px);
         padding-left: 14px !important;
-        padding-right: 4px !important;
+        padding-right: 14px !important;
         gap: 8px;
     }
     .nav__end {

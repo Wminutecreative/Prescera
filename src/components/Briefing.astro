@@ -6,8 +6,11 @@
 import Button from "./Button.astro";
 import { ROLES } from "../data/site";
 
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? "";
-const fallback = import.meta.env.PUBLIC_FORM_FALLBACK_EMAIL || "vamsi@presceralabs.ai";
+/* The live Google Apps Script web app is the default, so the form works on any host without env setup.
+   (The URL is public by nature: every visitor's browser sees it.) Set PUBLIC_FORM_ENDPOINT to point elsewhere. */
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycby7kQRc_ca7SPCLkwAqfH4crcFry_94vkIE_NuhjVfE3B94DyDhipLGrZp2MiFwbEH1/exec";
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || DEFAULT_ENDPOINT;
+const fallback = import.meta.env.PUBLIC_FORM_FALLBACK_EMAIL || "kartik@minutecreative.com";
 ---
 <section class="sec sec--brief" id="briefing" aria-labelledby="h-brief">
   <div class="shell brief">

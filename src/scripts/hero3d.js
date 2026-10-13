@@ -61,7 +61,10 @@ const Tier = {
     const q = /[?&]tier=(high|medium|low)/.exec(location.search); if (q) t = q[1];
     this.name = t;
   },
-  get dpr() { return Math.min(window.devicePixelRatio || 1, this.name === "high" ? 1.5 : this.name === "medium" ? 1.25 : 1); },
+  /* render resolution. Phones run the "low" tier but have 2x-3x screens: at 1x the scene was stretched and looked
+     blurry on iPhones, so phones render at up to 2x (phoneDpr), stepping down to 1.5x and 1x if frames run slow */
+  phoneDpr: 2,
+  get dpr() { const d = window.devicePixelRatio || 1; if (this.name === "low" && PL.mobile()) return Math.min(d, this.phoneDpr); return Math.min(d, this.name === "high" ? 1.5 : this.name === "medium" ? 1.25 : 1); },
   get shadows() { return this.name !== "low"; },
   get bloomScale() { return this.name === "high" ? 1 : this.name === "medium" ? 0.75 : 0.5; },
   get smaa() { return this.name !== "low"; },
@@ -73,6 +76,10 @@ const Tier = {
       this.name = this.name === "high" ? "medium" : "low"; this.acc = 0;
       try { sessionStorage.setItem("pl-tier", this.name); } catch (e) {}
       Manager.retier();
+    } else if (this.acc > 2 && this.slow > 0.04 && this.name === "low" && PL.mobile() && this.phoneDpr > 1) {
+      /* a phone under 25 fps: lower the resolution a step (2x → 1.5x → 1x) without rebuilding the scene */
+      this.phoneDpr = Math.max(1, this.phoneDpr - 0.5); this.acc = 0;
+      const st = Manager.it && Manager.it.stage; if (st) st.resize();
     }
   }
 };
