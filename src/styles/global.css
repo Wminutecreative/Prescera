@@ -1243,7 +1243,7 @@ html.no-motion .rv {
         justify-self: start;
     }
     .foot {
-        padding-bottom: calc(var(--s6) + 56px);
+        padding-bottom: calc(var(--s2) + 36px);
     }
 }
 
