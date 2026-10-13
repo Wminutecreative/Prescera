@@ -22,8 +22,10 @@ const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t
    Boot: wait for first paint, then load three and its official addons
    --------------------------------------------------------------------- */
 async function boot() {
-  if (!PL.webgl) return;
   await new Promise((r) => (window.requestIdleCallback ? requestIdleCallback(r, { timeout: 900 }) : setTimeout(r, 300)));
+  /* the real WebGL2 check, made here rather than at page load (it is slow), and the test context released at once */
+  try { const gl = D.createElement("canvas").getContext("webgl2"); if (!gl) throw 0; const lose = gl.getExtension("WEBGL_lose_context"); lose && lose.loseContext(); }
+  catch (e) { PL.webgl = false; PL.no3D(); return; }
   try {
     T = await import("three");
     const m = await Promise.all([
@@ -34,7 +36,7 @@ async function boot() {
       import("three/examples/jsm/utils/BufferGeometryUtils.js"), import("three/examples/jsm/shaders/FXAAShader.js")
     ]);
     Object.assign(A, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9]);
-  } catch (e) { console.warn("3D unavailable, keeping the 2D figures", e); return; }
+  } catch (e) { console.warn("3D unavailable, keeping the 2D figures", e); PL.no3D(); return; }
   /* tone mapping: identity below 0.6, a soft filmic shoulder above, so the page colours and the
      brand ember stay exact while bloom highlights roll off */
   T.ShaderChunk.tonemapping_pars_fragment = T.ShaderChunk.tonemapping_pars_fragment.replace(
@@ -1083,7 +1085,7 @@ const Manager = {
   sync() {
     const it = this.it; if (!it || !PL.motion) return;
     if (it.near && !it.stage) {
-      try { it.stage = new Hero(it.el); live.hero = true; PL._hero = it.stage; it.el.classList.add("is-live"); } catch (err) { console.warn("3D hero failed", err); it.stage = null; live.hero = false; return; }
+      try { it.stage = new Hero(it.el); live.hero = true; PL._hero = it.stage; it.el.classList.add("is-live"); } catch (err) { console.warn("3D hero failed", err); it.stage = null; live.hero = false; PL.no3D(); return; }
     }
     if (it.stage) { if (it.vis && !D.hidden) it.stage.start(); else it.stage.stop(); }
   },

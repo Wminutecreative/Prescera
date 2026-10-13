@@ -16,10 +16,10 @@ import Briefing from "../components/Briefing.astro";
 
 <script>
   /* Order matters: shared data and the 2D twin first, then page behaviour, the stat figures,
-     the timeline, and last the 3D hero (which loads three.js lazily after first paint). */
+     the timeline, and last the loader that brings in the 3D hero (and three.js) on first interaction or when idle. */
   import "../scripts/pl-data.js";
   import "../scripts/page.js";
   import "../scripts/tiles.js";
   import "../scripts/workflow.js";
-  import "../scripts/hero3d.js";
+  import "../scripts/hero-loader.js";
 </script>

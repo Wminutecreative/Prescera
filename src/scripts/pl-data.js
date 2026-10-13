@@ -233,14 +233,22 @@
   PL.twinNetwork = function (pr, o) {
     o = o || {};
     var s = "", mob = o.mobile, R = o.reach == null ? -1 : o.reach;
-    /* ground grid, fading radially (drawn as short segments so the fade is exact) */
+    /* ground grid, fading radially. Each 1-unit segment gets its own opacity, but segments are grouped into
+       12 opacity steps and drawn as one <path> per step: the same picture with ~12 elements instead of ~1,000 */
+    var STEPS = 12, AMAX = 0.16, bucket = [];
     for (var g = -11; g <= 11; g++) {
       var major = g % 5 === 0;
       for (var k = -11; k < 11; k++) {
         var segs = [[[g, 0, k], [g, 0, k + 1]], [[k, 0, g], [k + 1, 0, g]]];
-        segs.forEach(function (sg) { var mx = (sg[0][0] + sg[1][0]) / 2, mz = (sg[0][2] + sg[1][2]) / 2, rr = Math.hypot(mx, mz), a = Math.max(0, 1 - rr / 11); if (a < 0.03) return; a = a * a * (major ? 0.16 : 0.08); s += '<polyline points="' + pts(sg.map(pr)) + '" stroke="#DCDCDC" stroke-opacity="' + a.toFixed(3) + '" stroke-width=".6" fill="none"/>'; });
+        segs.forEach(function (sg) {
+          var mx = (sg[0][0] + sg[1][0]) / 2, mz = (sg[0][2] + sg[1][2]) / 2, rr = Math.hypot(mx, mz), a = Math.max(0, 1 - rr / 11); if (a < 0.03) return;
+          a = a * a * (major ? 0.16 : 0.08);
+          var b = Math.min(STEPS - 1, Math.round(a / AMAX * (STEPS - 1))), p0 = pr(sg[0]), p1 = pr(sg[1]);
+          (bucket[b] || (bucket[b] = [])).push("M" + f1(p0[0]) + " " + f1(p0[1]) + "L" + f1(p1[0]) + " " + f1(p1[1]));
+        });
       }
     }
+    bucket.forEach(function (d, b) { if (d && b) s += '<path d="' + d.join("") + '" stroke="#DCDCDC" stroke-opacity="' + (b / (STEPS - 1) * AMAX).toFixed(3) + '" stroke-width=".6" fill="none"/>'; });
     /* zone rings, dashed */
     PL.ZONES.forEach(function (zn) { s += '<polyline points="' + pts(circle3(0, 0, zn.r, zn.id === "core" ? 0 : 0.001, 160).map(pr)) + '" fill="none" stroke="rgba(220,220,220,.2)" stroke-width=".7" stroke-dasharray="3 5"/>'; });
     /* core plinth: top disc + visible front band */
