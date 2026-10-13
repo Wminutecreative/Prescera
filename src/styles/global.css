@@ -3938,7 +3938,7 @@ html:not(.no-motion) .hero__copy> :nth-child(4) {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--gut);
-    align-items: baseline;
+    /* align-items: baseline; */
 }
 
 .belief__head {
@@ -4997,9 +4997,9 @@ html.no-motion .src:hover i {
     #changed .changed__head {
         align-items: start;
     }
-    #changed .changed__head>div {
+    /* #changed .changed__head>div {
         padding-top: 29px;
-    }
+    } */
 }
 
 #changed .changed__head .points b {
@@ -5527,5 +5527,21 @@ html.no-motion .form-done.is-in * {
         padding-left: 0;
         border-left: 0;
         border-top: 1px solid var(--line);
+    }
+}
+
+
+/* Defender timeline, tablet and phone: the "Proactive / Reactive" brackets and the numbered rail are measured
+   for four cards in one row. Once the cards wrap to two columns (or one) they no longer line up and the labels
+   collide, so hide them; each card shows its own "Before an attack" / "During" / "After" label instead.
+   (Restores the earlier 900px rule, which the later ".wf__zones { display: block }" overrode.) */
+
+@media (max-width: 900px) {
+    .wf__zones,
+    .wf__rail {
+        display: none;
+    }
+    .wf__c em {
+        display: block;
     }
 }
