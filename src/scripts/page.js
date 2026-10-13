@@ -19,7 +19,9 @@
   if (mq.addEventListener) mq.addEventListener("change", function (e) { PL.motion = !e.matches; html.classList.toggle("no-motion", !PL.motion); emit("pl:motion", PL.motion); });
 
   /* ---------- WebGL support, and what counts as a phone: under 768 px, or a touch screen under 1024 px */
-  PL.webgl = (function () { try { var c = D.createElement("canvas"); return !!(W.WebGL2RenderingContext && c.getContext("webgl2")); } catch (e) { return false; } })();
+  /* a cheap feature test at load: creating a real WebGL context here cost ~1 s of main thread before first paint.
+     hero3d.js makes the real check once the page has painted, and calls PL.no3D() if it fails */
+  PL.webgl = !!W.WebGL2RenderingContext;
   PL.mobile = function () { return W.innerWidth < 768 || !!(W.matchMedia && W.matchMedia("(pointer: coarse)").matches && W.innerWidth < 1024); };
 
   /* ---------- shared tooltip */
@@ -122,12 +124,17 @@
 
   /* ---------- nav, menu, mobile bar */
   var nav = $("[data-nav]"), menuB = $("[data-menu]"), mm = $("[data-mmenu]"), mbar = $("[data-mbar]"), heroEl = $(".hero"), briefEl = $("#briefing");
-  menuB.addEventListener("click", function () { var o = menuB.getAttribute("aria-expanded") !== "true"; menuB.setAttribute("aria-expanded", o ? "true" : "false"); menuB.setAttribute("aria-label", o ? "Close menu" : "Open menu"); mm.hidden = !o; });
-  $$("a", mm).forEach(function (a) { a.addEventListener("click", function () { if (!a.hasAttribute("data-soon")) menuB.click(); }); });
-  D.addEventListener("keydown", function (e) { if (e.key === "Escape" && menuB.getAttribute("aria-expanded") === "true") { menuB.click(); menuB.focus(); } });
+  /* the menu button and mobile menu are optional (the header may have no links); skip them when they are not on the page */
+  if (menuB && mm) {
+    menuB.addEventListener("click", function () { var o = menuB.getAttribute("aria-expanded") !== "true"; menuB.setAttribute("aria-expanded", o ? "true" : "false"); menuB.setAttribute("aria-label", o ? "Close menu" : "Open menu"); mm.hidden = !o; });
+    $$("a", mm).forEach(function (a) { a.addEventListener("click", function () { if (!a.hasAttribute("data-soon")) menuB.click(); }); });
+    D.addEventListener("keydown", function (e) { if (e.key === "Escape" && menuB.getAttribute("aria-expanded") === "true") { menuB.click(); menuB.focus(); } });
+  }
   var heroOut = false, briefIn = false;
-  onView(heroEl, function (v) { heroOut = !v; mbar.classList.toggle("on", heroOut && !briefIn); }, 0.05);
-  onView(briefEl, function (v) { briefIn = v; mbar.classList.toggle("on", heroOut && !briefIn); }, 0.1);
+  if (mbar) {
+    onView(heroEl, function (v) { heroOut = !v; mbar.classList.toggle("on", heroOut && !briefIn); }, 0.05);
+    onView(briefEl, function (v) { briefIn = v; mbar.classList.toggle("on", heroOut && !briefIn); }, 0.1);
+  }
   var ticking = false;
   function onScroll() { ticking = false; nav.classList.toggle("is-scrolled", W.scrollY > 8); }
   W.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
@@ -182,6 +189,8 @@
      Without them (reduced motion or no WebGL) it rests on the stop summary; with motion but no 3D it still tours after a moment. */
   if (PL.motion && PL.webgl) { PL.hud(0); setTimeout(function () { if (!PL.live.hero && !settled) { PL.hudStop(); settle(); } }, 6000); } /* safety: the 3D never started */
   else { PL.hudStop(); if (PL.motion) setTimeout(settle, 1200); }
+  /* the 3D module calls this if the real WebGL check fails: same result as having no WebGL from the start */
+  PL.no3D = function () { if (!PL.live.hero && !settled) { PL.hudStop(); if (PL.motion) setTimeout(settle, 1200); } };
   function stillNote() { var fi = $(".hud__fine"); if (!fi) return; if (!PL.motion) { fi.textContent = "Animations are off in your browser, so this shows the end of the attack. Use the arrows to step through all ten stages."; hud.classList.add("is-still-note"); } else { fi.textContent = "This is one example of how an AI attack can unfold."; hud.classList.remove("is-still-note"); } }
   stillNote(); W.addEventListener("pl:motion", stillNote);
   drawTwins();

@@ -6,7 +6,27 @@ export default defineConfig({
   site: "https://presceralabs.ai",
   output: "static",
   integrations: [sitemap()],
-  build: { inlineStylesheets: "auto" },
-  /* three.js is ~670 kB but lives in its own lazily imported chunk, loaded after first paint */
-  vite: { build: { chunkSizeWarningLimit: 800 } },
+  /* the stylesheet is inlined into the page, so first paint needs no extra request */
+  build: { inlineStylesheets: "always" },
+  vite: {
+    /* three.js is ~670 kB but lives in its own lazily imported chunk, loaded after first paint */
+    build: { chunkSizeWarningLimit: 800 },
+    /* dev only: pre-bundle three.js and the addons the hero loads, so the dev server never re-optimises them
+       mid-session (that can make the hero's import fail and fall back to the 2D drawing) */
+    optimizeDeps: {
+      include: [
+        "three",
+        "three/examples/jsm/postprocessing/EffectComposer.js",
+        "three/examples/jsm/postprocessing/RenderPass.js",
+        "three/examples/jsm/postprocessing/UnrealBloomPass.js",
+        "three/examples/jsm/postprocessing/SMAAPass.js",
+        "three/examples/jsm/postprocessing/OutputPass.js",
+        "three/examples/jsm/postprocessing/ShaderPass.js",
+        "three/examples/jsm/environments/RoomEnvironment.js",
+        "three/examples/jsm/geometries/RoundedBoxGeometry.js",
+        "three/examples/jsm/utils/BufferGeometryUtils.js",
+        "three/examples/jsm/shaders/FXAAShader.js",
+      ],
+    },
+  },
 });

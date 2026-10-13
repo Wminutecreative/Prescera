@@ -24,6 +24,9 @@ const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t
 async function boot() {
   if (!PL.webgl) return;
   await new Promise((r) => (window.requestIdleCallback ? requestIdleCallback(r, { timeout: 900 }) : setTimeout(r, 300)));
+  /* the real WebGL2 check (moved here from page load), with the test context released at once */
+  try { const gl = D.createElement("canvas").getContext("webgl2"); if (!gl) throw 0; const lose = gl.getExtension("WEBGL_lose_context"); lose && lose.loseContext(); }
+  catch (e) { PL.webgl = false; PL.no3D && PL.no3D(); return; }
   try {
     T = await import("three");
     const m = await Promise.all([

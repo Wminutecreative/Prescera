@@ -1,5 +1,14 @@
 ---
+/* fonts are self-hosted (no render-blocking request to Google). Only the latin subset downloads, via unicode-range */
+import "@fontsource/hanken-grotesk/300.css";
+import "@fontsource/hanken-grotesk/400.css";
+import "@fontsource/hanken-grotesk/500.css";
+import "@fontsource/dm-mono/400.css";
+import "@fontsource/dm-mono/500.css";
 import "../styles/global.css";
+/* the two faces the hero headline and copy use on first paint are preloaded */
+import hanken400 from "@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-normal.woff2?url";
+import hanken300 from "@fontsource/hanken-grotesk/files/hanken-grotesk-latin-300-normal.woff2?url";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import MobileBar from "../components/MobileBar.astro";
@@ -32,9 +41,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#111111" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="preload" href={hanken400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={hanken300} as="font" type="font/woff2" crossorigin />
     <!-- reduced motion is read before the first paint, so the page never flashes the animated state -->
     <script is:inline>
       (function () { try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("no-motion"); } catch (e) {} })();
