@@ -4,14 +4,14 @@ export interface NavLink { label: string; href: string; soon?: boolean }
 
 /* About us and Careers are listed but not built yet */
 export const NAV_LINKS: NavLink[] = [
-  { label: "About us", href: "#", soon: true },
-  { label: "Careers", href: "#", soon: true },
+  // { label: "About us", href: "#", soon: true },
+  // { label: "Careers", href: "#", soon: true },
 ];
 
 export const FOOTER_LINKS: NavLink[] = [
   { label: "Home", href: "#top" },
-  { label: "About us", href: "#", soon: true },
-  { label: "Careers", href: "#", soon: true },
+  // { label: "About us", href: "#", soon: true },
+  // { label: "Careers", href: "#", soon: true },
   { label: "Request access", href: "#briefing" },
 ];
 
