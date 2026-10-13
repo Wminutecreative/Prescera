@@ -373,9 +373,12 @@ dd {
     transition: border-color .3s;
 }
 
+.nav {
+    padding: 10px 0px;
+}
+
 .nav.is-scrolled {
     border-bottom-color: var(--line);
-    padding: 10px 0px;
 }
 
 .nav__in {
