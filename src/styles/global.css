@@ -1139,6 +1139,7 @@ html.no-motion .rv {
 .form__st {
     color: var(--attack);
     font-size: 13px;
+    display: none;
     min-height: 1.4em;
 }
 
