@@ -16,11 +16,10 @@ import Briefing from "../components/Briefing.astro";
 
 <script>
   /* Order matters: shared data and the 2D twin first, then page behaviour, the stat figures,
-     the timeline, and last the 3D hero. The hero is a separate chunk fetched straight away (it then waits for
-     first paint and loads three.js itself), so the main script stays small; timing is the same as before. */
+     the timeline, and last the loader that brings in the 3D hero straight away (it waits for first paint, then loads three.js). */
   import "../scripts/pl-data.js";
   import "../scripts/page.js";
   import "../scripts/tiles.js";
   import "../scripts/workflow.js";
-  if (window.PL && window.PL.webgl) import("../scripts/hero3d.js").catch((e) => { console.warn("3D hero did not load, keeping the 2D figure", e); window.PL.no3D && window.PL.no3D(); });
+  import "../scripts/hero-loader.js";
 </script>

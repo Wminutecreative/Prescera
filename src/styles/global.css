@@ -5533,12 +5533,10 @@ html.no-motion .form-done.is-in * {
     }
 }
 
-
 /* Defender timeline, tablet and phone: the "Proactive / Reactive" brackets and the numbered rail are measured
    for four cards in one row. Once the cards wrap to two columns (or one) they no longer line up and the labels
    collide, so hide them; each card shows its own "Before an attack" / "During" / "After" label instead.
    (Restores the earlier 900px rule, which the later ".wf__zones { display: block }" overrode.) */
-
 @media (max-width: 900px) {
     .wf__zones,
     .wf__rail {
