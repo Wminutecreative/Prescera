@@ -13,6 +13,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import MobileBar from "../components/MobileBar.astro";
 import Tooltip from "../components/Tooltip.astro";
+import Analytics from "../components/Analytics.astro";
 
 interface Props {
   title?: string;
@@ -47,6 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <script is:inline>
       (function () { try { if (matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("no-motion"); } catch (e) {} })();
     </script>
+    <Analytics />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
