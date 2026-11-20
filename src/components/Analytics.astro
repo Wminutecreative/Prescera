@@ -1,0 +1,53 @@
+---
+/* Each tool switches on when its PUBLIC_* ID is set (see .env.example), and only in production builds,
+   so local dev never pollutes the numbers. An inline script with define:vars runs inside its own function,
+   so anything other tags need (gtag, dataLayer) has to be put on window explicitly. */
+const {
+  PROD,
+  PUBLIC_GA_ID: gaId,
+  PUBLIC_GTM_ID: gtmId,
+  PUBLIC_CLARITY_ID: clarityId,
+  PUBLIC_CONTENTSQUARE_ID: contentsquareId,
+  PUBLIC_POSTHOG_KEY: posthogKey,
+} = import.meta.env;
+---
+<!-- Google Search Console and Bing Webmaster Tools ownership checks. Not secrets, so they are set here rather than in env vars -->
+<meta name="google-site-verification" content="nkRLb2Ml2qYNCzaUhNgKMimAffupxq44TFVc54X2P3M" />
+<meta name="msvalidate.01" content="56D18611D7285D7B13316432D0AEC566" />
+
+
+{PROD && gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>}
+{PROD && gaId && (
+  <script define:vars={{ gaId }}>
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", gaId);
+  </script>
+)}
+
+{PROD && gtmId && (
+  <script define:vars={{ gtmId }}>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var gtm = document.createElement("script");
+    gtm.async = true;
+    gtm.src = "https://www.googletagmanager.com/gtm.js?id=" + gtmId;
+    document.head.appendChild(gtm);
+  </script>
+)}
+
+{PROD && clarityId && (
+  <script define:vars={{ clarityId }}>
+    window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
+    var clarityTag = document.createElement("script");
+    clarityTag.async = true;
+    clarityTag.src = "https://www.clarity.ms/tag/" + clarityId;
+    document.head.appendChild(clarityTag);
+  </script>
+)}
+
+{/* Contentsquare (formerly Hotjar): new Hotjar sign-ups get a Contentsquare tag, not the old static.hotjar.com one */}
+{PROD && contentsquareId && <script is:inline defer src={`https://t.contentsquare.net/uxa/${contentsquareId}.js`}></script>}
+
+{PROD && posthogKey && <script src="../scripts/posthog.js"></script>}
