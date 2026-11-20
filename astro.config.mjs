@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://presceralabs.ai",
+  site: "https://www.presceralabs.ai",
   output: "static",
   integrations: [sitemap()],
   /* the stylesheet (~13 kB gzipped) is inlined into the page, so first paint needs no extra request */
