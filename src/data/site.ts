@@ -2,18 +2,28 @@
 
 export interface NavLink { label: string; href: string; soon?: boolean }
 
-/* About us and Careers are listed but not built yet */
+/* Links are root-relative so they work from every page. */
 export const NAV_LINKS: NavLink[] = [
-  // { label: "About us", href: "#", soon: true },
+  { label: "About us", href: "/about" },
   // { label: "Careers", href: "#", soon: true },
 ];
 
 export const FOOTER_LINKS: NavLink[] = [
-  { label: "Home", href: "#top" },
-  // { label: "About us", href: "#", soon: true },
+  { label: "Home", href: "/" },
+  { label: "About us", href: "/about" },
   // { label: "Careers", href: "#", soon: true },
-  { label: "Request access", href: "#briefing" },
+  { label: "Request access", href: "/#briefing" },
 ];
+
+/* About page copy. TODO: drafted from the approved homepage lines; needs messaging sign-off before launch. */
+export const ABOUT = {
+  title: "About us · Prescera Labs",
+  description: "Prescera Labs is a cybersecurity AI lab building foundation models for cyber defence, so security teams can act at machine speed.",
+};
+
+/* Team groups, in display order. The first group shows as large portraits, the rest as compact rows.
+   The CMS (.pages.yml) offers the same list; keep them in sync. */
+export const TEAM_GROUPS = ["Founders", "Board of Directors", "Technical Advisory Board", "Research", "Leadership", "Advisors"] as const;
 
 export interface Tile {
   date: string;

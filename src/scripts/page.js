@@ -316,19 +316,23 @@
         mbar = $("[data-mbar]"),
         heroEl = $(".hero"),
         briefEl = $("#briefing");
-    menuB.addEventListener("click", function() {
-        var o = menuB.getAttribute("aria-expanded") !== "true";
-        menuB.setAttribute("aria-expanded", o ? "true" : "false");
-        menuB.setAttribute("aria-label", o ? "Close menu" : "Open menu");
-        mm.hidden = !o;
-    });
-    $$("a", mm).forEach(function(a) { a.addEventListener("click", function() { if (!a.hasAttribute("data-soon")) menuB.click(); }); });
-    D.addEventListener("keydown", function(e) {
-        if (e.key === "Escape" && menuB.getAttribute("aria-expanded") === "true") {
-            menuB.click();
-            menuB.focus();
-        }
-    });
+    /* the menu button can be switched off in Header.astro; without this guard the rest of this script
+       (scroll state, mobile bar, the request-access form) stopped running */
+    if (menuB && mm) {
+        menuB.addEventListener("click", function() {
+            var o = menuB.getAttribute("aria-expanded") !== "true";
+            menuB.setAttribute("aria-expanded", o ? "true" : "false");
+            menuB.setAttribute("aria-label", o ? "Close menu" : "Open menu");
+            mm.hidden = !o;
+        });
+        $$("a", mm).forEach(function(a) { a.addEventListener("click", function() { if (!a.hasAttribute("data-soon")) menuB.click(); }); });
+        D.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && menuB.getAttribute("aria-expanded") === "true") {
+                menuB.click();
+                menuB.focus();
+            }
+        });
+    }
     var heroOut = false,
         briefIn = false;
     onView(heroEl, function(v) {

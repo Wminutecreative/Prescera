@@ -1,0 +1,39 @@
+---
+/* One person, in the design's card: portrait (initials tile when there is no photo), name, role, LinkedIn,
+   optional bio.
+   Links (each shown only when set): LinkedIn, Google Scholar, then the other profile (labelled GitHub or Website). `row` gives the compact card (photo beside the name) used for every group after the first. */
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+
+interface Props { person: CollectionEntry<"team">; row?: boolean }
+const { person, row = false } = Astro.props;
+const { name, role, photo, linkedin, scholar, website, draft } = person.data;
+const { Content } = await render(person);
+const hasBio = Boolean(person.body?.trim());
+const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+const links = [
+  { href: linkedin, label: "LinkedIn" },
+  { href: scholar, label: "Google Scholar" },
+  { href: website, label: website && /^https?:\/\/(www\.)?github\.com\//.test(website) ? "GitHub" : "Website" },
+].filter((l) => l.href);
+---
+<li class:list={["pp rv", row && "pp--row"]}>
+  <div class="pp__ph">
+    <span class="pp__ini" aria-hidden="true">{initials}</span>
+    {photo && (
+      <Image src={photo} alt={name} widths={row ? [120, 240] : [360, 540, 760]} sizes={row ? "112px" : "(min-width: 1024px) 380px, (min-width: 600px) 30vw, 96px"} />
+    )}
+    {draft && <span class="pp__draft">Draft · dev only</span>}
+  </div>
+  <div class="pp__meta">
+    <div><h4>{name}</h4>{role && <p>{role}</p>}</div>
+    {links.length > 0 && (
+      <div class="pp__links">
+        {links.map((l) => (
+          <a class="xlink" href={l.href} target="_blank" rel="noopener noreferrer" aria-label={`${name} on ${l.label}`}>{l.label} <i aria-hidden="true"></i></a>
+        ))}
+      </div>
+    )}
+  </div>
+  {hasBio && <div class="pp__bio"><Content /></div>}
+</li>

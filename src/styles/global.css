@@ -5541,3 +5541,12 @@ html.no-motion .form-done.is-in * {
         display: block;
     }
 }
+
+/* logo (svg wordmark, see Wordmark.astro) */
+.wordmark { align-items: center; min-height: 44px; }
+.wordmark .plogo { display: block; height: 19px; width: auto; transition: opacity .3s; }
+.wordmark:hover .plogo { opacity: .85; }
+.foot__brand .wordmark { min-height: 0; align-self: flex-start; }
+.foot__brand .wordmark .plogo { height: 24px; }
+@media (max-width: 480px) { .wordmark .plogo { height: 16px; } }
+@media (max-width: 374px) { .wordmark .plogo { height: 12.5px; } }

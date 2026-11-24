@@ -1,0 +1,32 @@
+---
+/* ABOUT · 07 · PEOPLE · rendered from the team collection (src/content/team, editable in Pages CMS).
+   Groups follow TEAM_GROUPS; empty groups are skipped. The first group (Founders) shows as large portraits,
+   the others as compact rows, as in the design. Drafts appear in `npm run dev` only. */
+import { getCollection } from "astro:content";
+import TeamCard from "./TeamCard.astro";
+import { TEAM_GROUPS } from "../../data/site";
+
+const people = (await getCollection("team", ({ data }) => import.meta.env.DEV || !data.draft))
+  .sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
+const groups = TEAM_GROUPS
+  .map((name, i) => ({ name, lead: i === 0, people: people.filter((p) => p.data.group === name) }))
+  .filter((g) => g.people.length);
+---
+<section class="sec" id="people" aria-labelledby="h-people">
+  <div class="shell">
+    <header class="sec__head sec__head--split grid">
+      <div><h2 id="h-people" class="rv">The people behind Prescera Labs.</h2></div>
+      <p class="lead rv">The founders and researchers building models for cyber defence.</p>
+    </header>
+    {groups.length ? groups.map((g) => (
+      <>
+        <div class="ppl__group"><h3>{g.name}</h3><span>{g.people.length}</span></div>
+        <ul class:list={["ppl__grid", !g.lead && "ppl__grid--r"]}>
+          {g.people.map((p) => <TeamCard person={p} row={!g.lead} />)}
+        </ul>
+      </>
+    )) : (
+      <p class="lead">Team profiles are coming soon.</p>
+    )}
+  </div>
+</section>

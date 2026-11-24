@@ -1,0 +1,24 @@
+---
+/* ABOUT · 01 · HERO · who we are. A model at the centre of the network: attack signals arrive, responses leave.
+   The drawing is built by src/scripts/about.js into [data-core-svg]. PROPOSED COPY (needs founder OK). */
+import Button from "../Button.astro";
+---
+<section class="ahero" id="top" aria-labelledby="h-about">
+  <div class="shell grid ahero__grid">
+    <div class="ahero__copy">
+      <h1 id="h-about"><span class="l1">A cybersecurity AI lab.</span> <span class="l2">Building AI for <span class="hl">defenders</span>.</span></h1>
+      <p class="ahero__sub">We build foundation models for cyber defence, so security teams can act at machine speed.</p>
+      <div class="ahero__act">
+        <Button href="/#briefing">Request access</Button>
+        <a class="xlink ahero__link" href="#people">Meet the team <i aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <figure class="ahero__fig" aria-label="Illustration: attack signals travel in from the edge of a network to a cyber defence model at its centre; the model sends a response back out to the systems they touched.">
+      <div class="core" data-core="hero">
+        <svg viewBox="0 70 640 440" aria-hidden="true" data-core-svg></svg>
+        <span class="flbl chip" data-core-lbl>Cyber defence model</span>
+      </div>
+      <figcaption class="legend" aria-hidden="true"><span><i class="k k--a"></i>Attack signal</span><span><i class="k k--d"></i>Response from the model</span></figcaption>
+    </figure>
+  </div>
+</section>

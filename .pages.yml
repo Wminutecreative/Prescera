@@ -1,0 +1,38 @@
+# Pages CMS (https://pagescms.org): sign in with GitHub, open this repo, and edit the team from a web UI.
+# Each save commits to the branch you picked; Vercel then rebuilds the site.
+media:
+  input: src/assets/team
+  output: ../../assets/team
+  extensions: [jpg, jpeg, png, webp, avif]
+
+content:
+  - name: team
+    label: Team
+    type: collection
+    path: src/content/team
+    filename: "{fields.name}.md"
+    view:
+      fields: [name, role, group, draft]
+      primary: name
+      sort: [group, order, name]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: role, label: Role / title, type: string }
+      - name: group
+        label: Group
+        type: select
+        required: true
+        options:
+          # keep in sync with TEAM_GROUPS in src/data/site.ts. The first group shows as large portraits.
+          values: [Founders, Board of Directors, Technical Advisory Board, Research, Leadership, Advisors]
+      - { name: order, label: Order in group (lower first), type: number, default: 100 }
+      - { name: photo, label: "Photo (portrait or square, at least 800 px wide)", type: image }
+      - { name: linkedin, label: LinkedIn URL, type: string }
+      - { name: scholar, label: Google Scholar URL, type: string }
+      - { name: website, label: Other profile URL, type: string }
+      - { name: draft, label: Hide from live site (draft), type: boolean, default: false }
+      - { name: body, label: Short bio (optional), type: rich-text }
+

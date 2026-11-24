@@ -1,0 +1,16 @@
+---
+/* ABOUT US · the design from the review file "About · Prescera Labs" (round 9), on the live site's nav, footer and
+   mobile bar. Only the hero and the team; people come from the CMS collection src/content/team (see .pages.yml).
+   Copy marked PROPOSED in the section components still needs founder sign-off. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AboutHero from "../components/about/AboutHero.astro";
+import Team from "../components/about/Team.astro";
+import { ABOUT } from "../data/site";
+import "../styles/about.css";
+---
+<BaseLayout title={ABOUT.title} description={ABOUT.description}>
+  <AboutHero />
+  <Team />
+</BaseLayout>
+
+<script src="../scripts/about.js"></script>
