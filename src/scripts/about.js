@@ -433,4 +433,44 @@
 
   /* ---------- "Back to top" in the footer */
   $$('a[href="#top"]').forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); W.scrollTo({ top: 0, behavior: motion() ? "smooth" : "auto" }); }); });
+  /* ---------- founder cards: "focus pull" bio (hover the photo; tap on touch; Enter/Space; Esc closes) */
+  var pps = $$("[data-pp]");
+  if (pps.length) {
+    var canHover = W.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var escH = function (w) { return w.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    $$("[data-pp-text]").forEach(function (p) {
+      var src = p.textContent.trim().replace(/\s+/g, " ");
+      p.setAttribute("aria-label", src);
+      p.innerHTML = src.split(" ").map(function (w, i) { return '<span class="pp__w" aria-hidden="true" style="--i:' + i + '">' + escH(w) + "</span>"; }).join(" ");
+      p.classList.add("is-split");
+    });
+    var ppOpen = function (c, open) {
+      if (c.classList.contains("is-open") === open) return;
+      c.classList.toggle("is-open", open);
+      var t = $("[data-pp-trigger]", c); if (t) t.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    var ppCloseOthers = function (except) { pps.forEach(function (c) { if (c !== except) ppOpen(c, false); }); };
+    var sizeScan = function () { pps.forEach(function (c) { var ph = $(".pp__ph", c); if (ph) ph.style.setProperty("--h", ph.clientHeight + "px"); }); };
+    sizeScan(); W.addEventListener("resize", sizeScan);
+    pps.forEach(function (c) {
+      var t = $("[data-pp-trigger]", c); if (!t) return;
+      if (canHover) {
+        t.addEventListener("pointerenter", function () { ppCloseOthers(c); ppOpen(c, true); });
+        t.addEventListener("pointerleave", function () { ppOpen(c, false); });
+      }
+      t.addEventListener("click", function (e) {
+        e.stopPropagation(); if (canHover) return; /* hover already opened it */
+        var open = !c.classList.contains("is-open"); ppCloseOthers(c); ppOpen(c, open);
+      });
+      t.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault(); var open = !c.classList.contains("is-open"); ppCloseOthers(c); ppOpen(c, open);
+      });
+    });
+    D.addEventListener("click", function (e) { if (!e.target.closest("[data-pp]")) ppCloseOthers(null); });
+    D.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      pps.forEach(function (c) { if (c.classList.contains("is-open")) { ppOpen(c, false); if (c.contains(D.activeElement)) { var t = $("[data-pp-trigger]", c); if (t) t.focus(); } } });
+    });
+  }
 })(window, document);

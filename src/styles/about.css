@@ -460,3 +460,46 @@ html.no-motion .bc:hover, html.no-motion .pc:hover { transform: none !important;
 .pp__links { display: flex; flex-wrap: wrap; column-gap: var(--s4); margin-top: 4px; }
 .pp__meta .pp__links .xlink { margin-top: 0; }
 @media (pointer: fine) { .pp__links .xlink { min-height: 32px; } }
+
+/* ---------- founder cards · "focus pull" bio reveal (hover, tap or Enter on the photo; Esc closes)
+   The portrait zooms and blurs into dark glass, an orange scan line passes down, and the bio comes into focus word
+   by word. Only large cards that have a bio get it (Team CMS → "Short bio"). Logic: src/scripts/about.js */
+.pp__media { position: absolute; inset: 0; transition: transform 1.4s cubic-bezier(.22,1,.36,1), filter 1s cubic-bezier(.22,1,.36,1); }
+.pp--pull .pp__ph { cursor: pointer; isolation: isolate; }
+.pp--pull .pp__ph:focus-visible { outline: 2px solid var(--defend); outline-offset: 4px; }
+.pp.is-open .pp__media { transform: scale(1.12); filter: blur(18px) brightness(.42) saturate(.6); }
+.pp.is-open .pp__ph img { transform: none; }
+.pp__shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.75) 100%); opacity: 0; transition: opacity .8s ease; }
+.pp.is-open .pp__shade { opacity: 1; }
+.pp__scan { position: absolute; left: 0; right: 0; top: 0; z-index: 2; height: 1px; background: var(--defend); box-shadow: 0 0 16px 2px rgba(var(--defend-rgb), .55); opacity: 0; }
+.pp.is-open .pp__scan { animation: ppScan 1.1s cubic-bezier(.76,0,.24,1) forwards; }
+@keyframes ppScan { 0% { opacity: 0; transform: translateY(0); } 10% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(var(--h, 440px)); } }
+.pp__over { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: flex-end; padding: var(--s5); pointer-events: none; }
+.pp__over-label { display: flex; align-items: center; gap: 8px; margin: 0 0 var(--s3); font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2);
+  opacity: 0; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease; }
+.pp__over-label::before, .pp__chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--defend); }
+.pp.is-open .pp__over-label { opacity: 1; transform: none; transition: opacity .5s ease .3s, transform .7s cubic-bezier(.22,1,.36,1) .3s; }
+.pp__over-text { margin: 0; font-size: 17px; line-height: 1.55; color: var(--fg); }
+.pp__w { display: inline-block; opacity: 0; filter: blur(8px); transform: translateY(.35em); transition: opacity .25s ease, filter .25s ease, transform .25s ease; }
+.pp.is-open .pp__w { opacity: 1; filter: blur(0); transform: none; transition: opacity .6s ease, filter .7s ease, transform .8s cubic-bezier(.22,1,.36,1); transition-delay: calc(.35s + var(--i) * 22ms); }
+/* before the script splits the text (or without it) the overlay text stays hidden unless opened */
+.pp:not(.is-open) .pp__over-text:not(.is-split) { opacity: 0; }
+.pp__chip { position: absolute; left: 12px; bottom: 12px; z-index: 3; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 999px;
+  background: rgba(14,14,14,.6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--fg); font-size: 13px; pointer-events: none; transition: opacity .4s ease, transform .6s cubic-bezier(.22,1,.36,1); }
+.pp.is-open .pp__chip { opacity: 0; transform: translateY(8px); }
+/* the bio under the card is the phone version; on larger screens it lives in the photo */
+.pp__bio--sm { display: none; }
+@media (max-width: 599px) {
+  .pp--pull .pp__ph { cursor: default; }
+  .pp__over, .pp__shade, .pp__scan, .pp__chip { display: none; }
+  .pp.is-open .pp__media { transform: none; filter: none; }
+  .pp__bio--sm { display: block; }
+}
+html.no-motion .pp__media, html.no-motion .pp.is-open .pp__media { transform: none; transition: filter .2s linear; }
+html.no-motion .pp__scan { display: none; }
+html.no-motion .pp__w, html.no-motion .pp.is-open .pp__w { filter: none; transform: none; transition: opacity .2s linear; }
+@media (prefers-reduced-motion: reduce) {
+  .pp__media, .pp.is-open .pp__media { transform: none; transition: filter .2s linear; }
+  .pp__scan { display: none; }
+  .pp__w, .pp.is-open .pp__w { filter: none; transform: none; transition: opacity .2s linear; }
+}

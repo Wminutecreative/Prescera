@@ -10,6 +10,14 @@ const { person, row = false } = Astro.props;
 const { name, role, photo, linkedin, scholar, website, draft } = person.data;
 const { Content } = await render(person);
 const hasBio = Boolean(person.body?.trim());
+/* Large cards with a bio get the "focus pull": hover (or tap / Enter) the photo and the bio comes into focus over it.
+   The overlay needs plain text (about.js splits it into words); the Markdown bio below the card is kept for phones,
+   where the large card becomes a small thumbnail. */
+const pull = !row && hasBio;
+const bioText = pull
+  ? person.body!.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[*_#>\x60]/g, "").replace(/\s+/g, " ").trim()
+  : "";
+const bioId = `bio-${person.id}`;
 const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 const links = [
   { href: linkedin, label: "LinkedIn" },
@@ -17,11 +25,32 @@ const links = [
   { href: website, label: website && /^https?:\/\/(www\.)?github\.com\//.test(website) ? "GitHub" : "Website" },
 ].filter((l) => l.href);
 ---
-<li class:list={["pp rv", row && "pp--row"]}>
-  <div class="pp__ph">
-    <span class="pp__ini" aria-hidden="true">{initials}</span>
-    {photo && (
-      <Image src={photo} alt={name} widths={row ? [120, 240] : [360, 540, 760]} sizes={row ? "112px" : "(min-width: 1024px) 380px, (min-width: 600px) 30vw, 96px"} />
+<li class:list={["pp rv", row && "pp--row", pull && "pp--pull"]} data-pp={pull ? "" : undefined}>
+  <div
+    class="pp__ph"
+    role={pull ? "button" : undefined}
+    tabindex={pull ? 0 : undefined}
+    aria-expanded={pull ? "false" : undefined}
+    aria-controls={pull ? bioId : undefined}
+    aria-label={pull ? `Show bio: ${name}` : undefined}
+    data-pp-trigger={pull ? "" : undefined}
+  >
+    <div class="pp__media">
+      <span class="pp__ini" aria-hidden="true">{initials}</span>
+      {photo && (
+        <Image src={photo} alt={name} widths={row ? [120, 240] : [360, 540, 760]} sizes={row ? "112px" : "(min-width: 1024px) 380px, (min-width: 600px) 30vw, 96px"} />
+      )}
+    </div>
+    {pull && (
+      <Fragment>
+        <div class="pp__shade" aria-hidden="true"></div>
+        <div class="pp__scan" aria-hidden="true"></div>
+        <div class="pp__over" id={bioId} role="region" aria-label={`Bio: ${name}`}>
+          <p class="pp__over-label">Bio</p>
+          <p class="pp__over-text" data-pp-text>{bioText}</p>
+        </div>
+        {/* <span class="pp__chip" aria-hidden="true">Bio</span> */}
+      </Fragment>
     )}
     {draft && <span class="pp__draft">Draft · dev only</span>}
   </div>
@@ -35,5 +64,5 @@ const links = [
       </div>
     )}
   </div>
-  {hasBio && <div class="pp__bio"><Content /></div>}
+  {hasBio && <div class:list={["pp__bio", pull && "pp__bio--sm"]}><Content /></div>}
 </li>
